@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "assets": "capacitor-assets generate --iconBackgroundColor '#f4f5f8' --splashBackgroundColor '#f4f5f8' --iconBackgroundColorDark '#222428' --splashBackgroundColorDark '#222428'",
-    "build": "npm run build:web && cap sync",
+    "build": "npm run clean && npm run trapeze && npm run build:web && cap sync",
     "build:web": "tsc && vite build",
+    "clean": "git checkout android/app/build.gradle android/app/src/main/AndroidManifest.xml ios/App/App/Info.plist",
     "dev": "vite",
     "lint": "eslint",
     "prepare": "husky install",
@@ -14,7 +15,8 @@
     "test": "vitest run",
     "test:cov": "vitest run --coverage",
     "test:dev": "vitest",
-    "test:e2e": "cypress run"
+    "test:e2e": "cypress run",
+    "trapeze": "(export $(cat .env | xargs) && trapeze run -y config.yaml)"
   },
   "dependencies": {
     "@capacitor/android": "5.2.2",
@@ -24,6 +26,7 @@
     "@capacitor/ios": "5.2.2",
     "@capacitor/keyboard": "5.0.6",
     "@capacitor/status-bar": "5.0.6",
+    "@ionic-enterprise/auth": "~5.0.4",
     "@ionic/react": "^7.0.0",
     "@ionic/react-router": "^7.0.0",
     "@types/react-router": "^5.1.20",
@@ -41,6 +44,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@trapezedev/configure": "~7.0.10",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-legacy": "^4.0.2",
