@@ -6,9 +6,9 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import ExploreContainer from "../../components/ExploreContainer";
-import "./TestConnection.css";
+import "./TestConnectionPage.css";
 
-const Tab1: React.FC = () => {
+const TestConnectionPage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
@@ -28,4 +28,4 @@ const Tab1: React.FC = () => {
   );
 };
 
-export default Tab1;
+export default TestConnectionPage;

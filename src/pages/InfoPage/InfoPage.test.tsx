@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import TestConnection from "./TestConnection";
+import InfoPage from "./InfoPage";
 
 test("renders without crashing", () => {
-  const { baseElement } = render(<TestConnection />);
+  const { baseElement } = render(<InfoPage />);
   expect(baseElement).toBeDefined();
 });
