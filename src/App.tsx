@@ -37,42 +37,45 @@ import "@ionic/react/css/text-transformation.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import AuthProvider from "./providers/AuthProvider";
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/test-connection">
-            <TestConnectionPage />
-          </Route>
-          <Route exact path="/settings">
-            <SettingsPage />
-          </Route>
-          <Route exact path="/info">
-            <InfoPage />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/test-connection" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="test-connection" href="/test-connection">
-            <IonIcon aria-hidden="true" icon={logInOutline} />
-            <IonLabel>Test Connection</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="settings" href="/settings">
-            <IonIcon aria-hidden="true" icon={settingsOutline} />
-            <IonLabel>Settings</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="info" href="/info">
-            <IonIcon aria-hidden="true" icon={informationCircleOutline} />
-            <IonLabel>Info</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
+      <AuthProvider>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route exact path="/test-connection">
+              <TestConnectionPage />
+            </Route>
+            <Route exact path="/settings">
+              <SettingsPage />
+            </Route>
+            <Route exact path="/info">
+              <InfoPage />
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/test-connection" />
+            </Route>
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="test-connection" href="/test-connection">
+              <IonIcon aria-hidden="true" icon={logInOutline} />
+              <IonLabel>Test Connection</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="settings" href="/settings">
+              <IonIcon aria-hidden="true" icon={settingsOutline} />
+              <IonLabel>Settings</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="info" href="/info">
+              <IonIcon aria-hidden="true" icon={informationCircleOutline} />
+              <IonLabel>Info</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </AuthProvider>
     </IonReactRouter>
   </IonApp>
 );
