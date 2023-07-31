@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import Info from "./Info";
+import SettingsPage from "./SettingsPage";
 
 test("renders without crashing", () => {
-  const { baseElement } = render(<Info />);
+  const { baseElement } = render(<SettingsPage />);
   expect(baseElement).toBeDefined();
 });

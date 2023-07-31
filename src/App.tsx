@@ -15,9 +15,9 @@ import {
   settingsOutline,
 } from "ionicons/icons";
 import { Redirect, Route } from "react-router-dom";
-import Info from "./pages/Info/Info";
-import Settings from "./pages/Settings/Settings";
-import TestConnection from "./pages/TestConnection/TestConnection";
+import InfoPage from "./pages/InfoPage/InfoPage";
+import SettingsPage from "./pages/SettingsPage/SettingsPage";
+import TestConnectionPage from "./pages/TestConnectionPage/TestConnectionPage";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -46,13 +46,13 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route exact path="/test-connection">
-            <TestConnection />
+            <TestConnectionPage />
           </Route>
           <Route exact path="/settings">
-            <Settings />
+            <SettingsPage />
           </Route>
-          <Route path="/info">
-            <Info />
+          <Route exact path="/info">
+            <InfoPage />
           </Route>
           <Route exact path="/">
             <Redirect to="/test-connection" />
