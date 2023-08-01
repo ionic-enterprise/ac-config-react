@@ -26,6 +26,7 @@ import {
 
 type Props = { children?: ReactNode };
 type Context = {
+  isSetup: boolean;
   flow?: Flow;
   options?: ProviderOptions;
   provider?: Provider;
@@ -78,7 +79,7 @@ const AuthProvider = ({ children }: Props) => {
 
   return (
     <AuthContext.Provider
-      value={{ flow, options, provider, session, updateAuthConfig }}
+      value={{ isSetup, flow, options, provider, session, updateAuthConfig }}
     >
       {isSetup ? children : <IonSpinner />}
     </AuthContext.Provider>
