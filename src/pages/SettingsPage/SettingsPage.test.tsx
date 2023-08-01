@@ -1,5 +1,5 @@
 import { isPlatform } from "@ionic/react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Mock, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAuth } from "../../providers/AuthProvider";
 import {
@@ -31,8 +31,8 @@ describe("Settings Page", () => {
   });
 
   it("has the correct title", async () => {
-    const { findByTestId } = render(<SettingsPage />);
-    const title = await findByTestId("page-title");
+    render(<SettingsPage />);
+    const title = await screen.findByTestId("page-title");
     expect(title.textContent).toBe("Settings");
   });
 
@@ -52,30 +52,30 @@ describe("Settings Page", () => {
     });
 
     it("displays a message to logout first", async () => {
-      const { findByTestId } = render(<SettingsPage />);
-      const message = findByTestId("logout-message");
+      render(<SettingsPage />);
+      const message = screen.findByTestId("logout-message");
       expect((await message).textContent?.trim()).toBe("Please log out first");
     });
 
     it("does not allow swaps", async () => {
-      const { findByTestId } = render(<SettingsPage />);
-      let button = await findByTestId("use-azure");
+      render(<SettingsPage />);
+      let button = await screen.findByTestId("use-azure");
       expect((button as HTMLButtonElement).disabled).toBe(true);
-      button = await findByTestId("use-aws");
+      button = await screen.findByTestId("use-aws");
       expect((button as HTMLButtonElement).disabled).toBe(true);
-      button = await findByTestId("use-auth0");
+      button = await screen.findByTestId("use-auth0");
       expect((button as HTMLButtonElement).disabled).toBe(true);
-      button = await findByTestId("use-okta");
+      button = await screen.findByTestId("use-okta");
       expect((button as HTMLButtonElement).disabled).toBe(true);
-      button = await findByTestId("use-customization");
+      button = await screen.findByTestId("use-customization");
       expect((button as HTMLButtonElement).disabled).toBe(true);
     });
 
     describe("provider", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("provider-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("provider-input");
       });
 
       it("is initialized", () => {
@@ -92,8 +92,8 @@ describe("Settings Page", () => {
     describe("client ID", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("client-id-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("client-id-input");
       });
 
       it("is initialized", () => {
@@ -110,8 +110,8 @@ describe("Settings Page", () => {
     describe("discovery URL", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("discovery-url-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("discovery-url-input");
       });
 
       it("is initialized", () => {
@@ -128,8 +128,8 @@ describe("Settings Page", () => {
     describe("scope", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("scope-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("scope-input");
       });
 
       it("is initialized", () => {
@@ -144,8 +144,8 @@ describe("Settings Page", () => {
     describe("audience", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("audience-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("audience-input");
       });
 
       it("is initialized", async () => {
@@ -177,8 +177,8 @@ describe("Settings Page", () => {
       describe("on web", () => {
         beforeEach(async () => {
           (isPlatform as Mock).mockReturnValue(false);
-          const { findByTestId } = render(<SettingsPage />);
-          input = await findByTestId("flow-input");
+          render(<SettingsPage />);
+          input = await screen.findByTestId("flow-input");
         });
 
         it("is initialized", () => {
@@ -212,24 +212,24 @@ describe("Settings Page", () => {
     });
 
     it("allows swaps", async () => {
-      const { findByTestId } = render(<SettingsPage />);
-      let button = await findByTestId("use-azure");
+      render(<SettingsPage />);
+      let button = await screen.findByTestId("use-azure");
       expect((button as HTMLButtonElement).disabled).toBe(false);
-      button = await findByTestId("use-aws");
+      button = await screen.findByTestId("use-aws");
       expect((button as HTMLButtonElement).disabled).toBe(false);
-      button = await findByTestId("use-auth0");
+      button = await screen.findByTestId("use-auth0");
       expect((button as HTMLButtonElement).disabled).toBe(false);
-      button = await findByTestId("use-okta");
+      button = await screen.findByTestId("use-okta");
       expect((button as HTMLButtonElement).disabled).toBe(false);
-      button = await findByTestId("use-customization");
+      button = await screen.findByTestId("use-customization");
       expect((button as HTMLButtonElement).disabled).toBe(false);
     });
 
     describe("provider", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("provider-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("provider-input");
       });
 
       it("is initialized", () => {
@@ -246,8 +246,8 @@ describe("Settings Page", () => {
     describe("client ID", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("client-id-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("client-id-input");
       });
 
       it("is initialized", () => {
@@ -264,8 +264,8 @@ describe("Settings Page", () => {
     describe("discovery URL", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("discovery-url-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("discovery-url-input");
       });
 
       it("is initialized", () => {
@@ -282,8 +282,8 @@ describe("Settings Page", () => {
     describe("scope", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("scope-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("scope-input");
       });
 
       it("is initialized", () => {
@@ -298,8 +298,8 @@ describe("Settings Page", () => {
     describe("audience", () => {
       let input: HTMLElement;
       beforeEach(async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        input = await findByTestId("audience-input");
+        render(<SettingsPage />);
+        input = await screen.findByTestId("audience-input");
       });
 
       it("is initialized", async () => {
@@ -331,8 +331,8 @@ describe("Settings Page", () => {
       describe("on web", () => {
         beforeEach(async () => {
           (isPlatform as Mock).mockReturnValue(false);
-          const { findByTestId } = render(<SettingsPage />);
-          input = await findByTestId("flow-input");
+          render(<SettingsPage />);
+          input = await screen.findByTestId("flow-input");
         });
 
         it("is initialized", () => {
@@ -357,20 +357,20 @@ describe("Settings Page", () => {
       });
 
       it("disables our big four templates", async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        let button = await findByTestId("use-azure");
+        render(<SettingsPage />);
+        let button = await screen.findByTestId("use-azure");
         expect((button as HTMLButtonElement).disabled).toBe(true);
-        button = await findByTestId("use-aws");
+        button = await screen.findByTestId("use-aws");
         expect((button as HTMLButtonElement).disabled).toBe(true);
-        button = await findByTestId("use-auth0");
+        button = await screen.findByTestId("use-auth0");
         expect((button as HTMLButtonElement).disabled).toBe(true);
-        button = await findByTestId("use-okta");
+        button = await screen.findByTestId("use-okta");
         expect((button as HTMLButtonElement).disabled).toBe(true);
       });
 
       it("allows customization", async () => {
-        const { findByTestId } = render(<SettingsPage />);
-        const button = await findByTestId("use-customization");
+        render(<SettingsPage />);
+        const button = await screen.findByTestId("use-customization");
         expect((button as HTMLButtonElement).disabled).toBe(false);
       });
     });
@@ -383,8 +383,8 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-azure");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-azure");
           fireEvent.click(button);
           expect(updateAuthConfig).toHaveBeenCalledTimes(1);
           expect(updateAuthConfig).toHaveBeenCalledWith(
@@ -402,8 +402,8 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-azure");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-azure");
           fireEvent.click(button);
           expect(updateAuthConfig).toHaveBeenCalledTimes(1);
           expect(updateAuthConfig).toHaveBeenCalledWith(
@@ -423,8 +423,8 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-aws");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-aws");
           fireEvent.click(button);
           expect(updateAuthConfig).toHaveBeenCalledTimes(1);
           expect(updateAuthConfig).toHaveBeenCalledWith(
@@ -442,8 +442,8 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-aws");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-aws");
           fireEvent.click(button);
           expect(updateAuthConfig).toHaveBeenCalledTimes(1);
           expect(updateAuthConfig).toHaveBeenCalledWith(
@@ -463,8 +463,8 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-auth0");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-auth0");
           fireEvent.click(button);
           expect(updateAuthConfig).toHaveBeenCalledTimes(1);
           expect(updateAuthConfig).toHaveBeenCalledWith(
@@ -482,8 +482,8 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-auth0");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-auth0");
           fireEvent.click(button);
           expect(updateAuthConfig).toHaveBeenCalledTimes(1);
           expect(updateAuthConfig).toHaveBeenCalledWith(
@@ -503,8 +503,8 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-okta");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-okta");
           fireEvent.click(button);
           expect(updateAuthConfig).toHaveBeenCalledTimes(1);
           expect(updateAuthConfig).toHaveBeenCalledWith(
@@ -522,8 +522,8 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-okta");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-okta");
           fireEvent.click(button);
           expect(updateAuthConfig).toHaveBeenCalledTimes(1);
           expect(updateAuthConfig).toHaveBeenCalledWith(
@@ -543,14 +543,14 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-customization");
-          let input = await findByTestId("client-id-input");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-customization");
+          let input = await screen.findByTestId("client-id-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", { detail: { value: "1994-9940fks" } }),
           );
-          input = await findByTestId("discovery-url-input");
+          input = await screen.findByTestId("discovery-url-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", {
@@ -559,26 +559,26 @@ describe("Settings Page", () => {
               },
             }),
           );
-          input = await findByTestId("scope-input");
+          input = await screen.findByTestId("scope-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", {
               detail: { value: "email offline" },
             }),
           );
-          input = await findByTestId("audience-input");
+          input = await screen.findByTestId("audience-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", { detail: { value: "people" } }),
           );
-          input = await findByTestId("flow-input");
+          input = await screen.findByTestId("flow-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", {
               detail: { value: flows.find((f) => f.key === "PKCE") },
             }),
           );
-          input = await findByTestId("provider-input");
+          input = await screen.findByTestId("provider-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", {
@@ -609,14 +609,14 @@ describe("Settings Page", () => {
 
         it("saves the config", async () => {
           const { updateAuthConfig } = useAuth();
-          const { findByTestId } = render(<SettingsPage />);
-          const button = await findByTestId("use-customization");
-          let input = await findByTestId("client-id-input");
+          render(<SettingsPage />);
+          const button = await screen.findByTestId("use-customization");
+          let input = await screen.findByTestId("client-id-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", { detail: { value: "1994-9940fks" } }),
           );
-          input = await findByTestId("discovery-url-input");
+          input = await screen.findByTestId("discovery-url-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", {
@@ -625,19 +625,19 @@ describe("Settings Page", () => {
               },
             }),
           );
-          input = await findByTestId("scope-input");
+          input = await screen.findByTestId("scope-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", {
               detail: { value: "email offline" },
             }),
           );
-          input = await findByTestId("audience-input");
+          input = await screen.findByTestId("audience-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", { detail: { value: "people" } }),
           );
-          input = await findByTestId("provider-input");
+          input = await screen.findByTestId("provider-input");
           fireEvent(
             input,
             new CustomEvent("ionChange", {

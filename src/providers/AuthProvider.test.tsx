@@ -1,6 +1,6 @@
 import { ProviderOptions } from "@ionic-enterprise/auth";
 import { isPlatform } from "@ionic/react";
-import { act, fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { Mock, beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -27,16 +27,13 @@ vi.mock("@ionic/react", async () => {
   return { ...actual, isPlatform: vi.fn().mockReturnValue(true) };
 });
 
-const expectOptions = async (
-  findByTestId: (id: string) => Promise<HTMLElement>,
-  expected: ProviderOptions,
-): Promise<void> => {
-  const audience = await findByTestId("audience");
-  const clientId = await findByTestId("clientId");
-  const discoveryUrl = await findByTestId("discoveryUrl");
-  const redirectUri = await findByTestId("redirectUri");
-  const logoutUrl = await findByTestId("logoutUrl");
-  const scope = await findByTestId("scope");
+const expectOptions = async (expected: ProviderOptions): Promise<void> => {
+  const audience = await screen.findByTestId("audience");
+  const clientId = await screen.findByTestId("clientId");
+  const discoveryUrl = await screen.findByTestId("discoveryUrl");
+  const redirectUri = await screen.findByTestId("redirectUri");
+  const logoutUrl = await screen.findByTestId("logoutUrl");
+  const scope = await screen.findByTestId("scope");
   expect(audience.textContent).toEqual(expected.audience);
   expect(clientId.textContent).toEqual(expected.clientId);
   expect(discoveryUrl.textContent).toEqual(expected.discoveryUrl);
@@ -103,32 +100,32 @@ describe("<AuthProvider />", () => {
     });
 
     it("sets the options", async () => {
-      const { findByTestId } = renderTestHarness();
-      const button = await findByTestId("updateButton");
-      act(() => fireEvent.click(button));
-      await expectOptions(findByTestId, azureConfig);
+      renderTestHarness();
+      const button = await screen.findByTestId("updateButton");
+      fireEvent.click(button);
+      await expectOptions(azureConfig);
     });
 
     it("sets the provider", async () => {
-      const { findByTestId } = renderTestHarness();
-      const button = await findByTestId("updateButton");
-      act(() => fireEvent.click(button));
-      const provider = await findByTestId("provider");
+      renderTestHarness();
+      const button = await screen.findByTestId("updateButton");
+      fireEvent.click(button);
+      const provider = await screen.findByTestId("provider");
       expect(provider.textContent).toEqual("azure");
     });
 
     it("sets the flow", async () => {
-      const { findByTestId } = renderTestHarness();
-      const button = await findByTestId("updateButton");
-      act(() => fireEvent.click(button));
-      const flow = await findByTestId("flow");
+      renderTestHarness();
+      const button = await screen.findByTestId("updateButton");
+      fireEvent.click(button);
+      const flow = await screen.findByTestId("flow");
       expect(flow.textContent).toEqual("implicit");
     });
 
     it("stores the config", async () => {
-      const { findByTestId } = renderTestHarness();
-      const button = await findByTestId("updateButton");
-      act(() => fireEvent.click(button));
+      renderTestHarness();
+      const button = await screen.findByTestId("updateButton");
+      fireEvent.click(button);
       expect(storeConfig).toHaveBeenCalledWith(
         testProvider,
         testProviderOptions,
@@ -139,15 +136,15 @@ describe("<AuthProvider />", () => {
 
   describe("initialization", () => {
     it("gets the provider options", async () => {
-      const { findByTestId } = renderTestHarness();
-      await findByTestId("ready");
+      renderTestHarness();
+      await screen.findByTestId("ready");
       expect(getProviderOptions).toHaveBeenCalledTimes(1);
     });
 
     it("sets the provider options", async () => {
       (getProviderOptions as Mock).mockResolvedValue(auth0Config);
-      const { findByTestId } = renderTestHarness();
-      await expectOptions(findByTestId, auth0Config);
+      renderTestHarness();
+      await expectOptions(auth0Config);
     });
 
     describe("when there are no options set", () => {
@@ -161,8 +158,8 @@ describe("<AuthProvider />", () => {
         });
 
         it("defaults to AWS", async () => {
-          const { findByTestId } = renderTestHarness();
-          await expectOptions(findByTestId, awsConfig);
+          renderTestHarness();
+          await expectOptions(awsConfig);
         });
       });
 
@@ -172,49 +169,49 @@ describe("<AuthProvider />", () => {
         });
 
         it("defaults to AWS with the web config", async () => {
-          const { findByTestId } = renderTestHarness();
-          await expectOptions(findByTestId, { ...awsConfig, ...webConfig });
+          renderTestHarness();
+          await expectOptions({ ...awsConfig, ...webConfig });
         });
       });
     });
 
     it("gets the flow", async () => {
-      const { findByTestId } = renderTestHarness();
-      await findByTestId("ready");
+      renderTestHarness();
+      await screen.findByTestId("ready");
       expect(getFlow).toHaveBeenCalledTimes(1);
     });
 
     it("sets the flow", async () => {
       (getFlow as Mock).mockResolvedValue(flows[0]);
-      const { findByTestId } = renderTestHarness();
-      const flow = await findByTestId("flow");
+      renderTestHarness();
+      const flow = await screen.findByTestId("flow");
       expect(flow.textContent).toEqual(flows[0].key);
     });
 
     it("defaults to PKCE", async () => {
       (getFlow as Mock).mockResolvedValue(undefined);
-      const { findByTestId } = renderTestHarness();
-      const flow = await findByTestId("flow");
+      renderTestHarness();
+      const flow = await screen.findByTestId("flow");
       expect(flow.textContent).toEqual("PKCE");
     });
 
     it("gets the provider", async () => {
-      const { findByTestId } = renderTestHarness();
-      await findByTestId("ready");
+      renderTestHarness();
+      await screen.findByTestId("ready");
       expect(getProvider).toHaveBeenCalledTimes(1);
     });
 
     it("sets the provider", async () => {
       (getProvider as Mock).mockResolvedValue(providers[1]);
-      const { findByTestId } = renderTestHarness();
-      const provider = await findByTestId("provider");
+      renderTestHarness();
+      const provider = await screen.findByTestId("provider");
       expect(provider.textContent).toEqual(providers[1].key);
     });
 
     it("defaults to congnito", async () => {
       (getProvider as Mock).mockResolvedValue(undefined);
-      const { findByTestId } = renderTestHarness();
-      const provider = await findByTestId("provider");
+      renderTestHarness();
+      const provider = await screen.findByTestId("provider");
       expect(provider.textContent).toEqual("cognito");
     });
   });
