@@ -46,10 +46,6 @@ const expectOptions = async (
 };
 
 describe("<AuthProvider />", () => {
-  const wrapper = ({ children }: any) => (
-    <AuthProvider>{children}</AuthProvider>
-  );
-
   let testProviderOptions: ProviderOptions;
   let testProvider: Provider;
   let testFlow: Flow;
