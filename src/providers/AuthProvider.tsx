@@ -6,7 +6,18 @@ import {
   useState,
 } from "react";
 import { IonSpinner, isPlatform } from "@ionic/react";
-import { AuthResult, ProviderOptions } from "@ionic-enterprise/auth";
+import {
+  Auth0Provider,
+  AuthConnect,
+  AuthConnectConfig,
+  AuthProvider as ACAuthProvider,
+  AuthResult,
+  AzureProvider,
+  CognitoProvider,
+  OktaProvider,
+  OneLoginProvider,
+  ProviderOptions,
+} from "@ionic-enterprise/auth";
 import {
   Flow,
   Provider,
@@ -16,13 +27,14 @@ import {
   webConfig,
 } from "../util/auth-config";
 import {
+  clearAuthResult,
+  getAuthResult,
   getFlow,
   getProvider,
   getProviderOptions,
+  storeAuthResult,
   storeConfig,
 } from "../util/auth-store";
-
-// NOTE: This is currently just a stub to get us off and running.
 
 type Props = { children?: ReactNode };
 type Context = {
@@ -36,11 +48,18 @@ type Context = {
     provider: Provider,
     flow?: Flow,
   ) => Promise<void>;
+  canRefresh: () => Promise<boolean>;
+  login: () => Promise<void>;
+  logout: () => Promise<void>;
+  refresh: () => Promise<void>;
 };
 
 const AuthContext = createContext<Context | undefined>(undefined);
 
 const AuthProvider = ({ children }: Props) => {
+  const [authProvider, setAuthProvider] = useState<
+    ACAuthProvider | undefined
+  >();
   const [options, setOptions] = useState<ProviderOptions | undefined>(
     undefined,
   );
@@ -62,6 +81,7 @@ const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const performSetup = async (): Promise<void> => {
+      setSession(await getAuthResult());
       setProvider(
         (await getProvider()) || providers.find((p) => p.key === "cognito"),
       );
@@ -74,12 +94,119 @@ const AuthProvider = ({ children }: Props) => {
       );
     };
 
-    performSetup().then(() => setIsSetup(true));
+    performSetup();
   }, []);
+
+  useEffect(() => {
+    if (provider && options && (isPlatform("mobile") || flow)) {
+      createAuthProvider();
+    }
+  }, [flow, provider, options]);
+
+  useEffect(() => {
+    if (authProvider) {
+      setupAuthConnect().then(() => setIsSetup(true));
+    }
+  }, [authProvider]);
+
+  const createAuthProvider = (): void => {
+    switch (provider?.key) {
+      case "auth0":
+        setAuthProvider(new Auth0Provider());
+        break;
+
+      case "azure":
+        setAuthProvider(new AzureProvider());
+        break;
+
+      case "cognito":
+        setAuthProvider(new CognitoProvider());
+        break;
+
+      case "okta":
+        setAuthProvider(new OktaProvider());
+        break;
+
+      case "onelogin":
+        setAuthProvider(new OneLoginProvider());
+        break;
+
+      default:
+        console.error("a provider was not set, defaulting to AWS");
+        setAuthProvider(new CognitoProvider());
+        break;
+    }
+  };
+
+  const setupAuthConnect = async (): Promise<void> => {
+    const cfg: AuthConnectConfig = {
+      logLevel: "DEBUG",
+      platform: isPlatform("hybrid") ? "capacitor" : "web",
+      ios: {
+        webView: "private",
+      },
+      web: {
+        uiMode: "popup",
+        authFlow: flow ? flow.key : "implicit",
+      },
+    };
+
+    await AuthConnect.setup(cfg);
+  };
+
+  const login = async (): Promise<void> => {
+    if (authProvider && options) {
+      const authResult = await AuthConnect.login(authProvider, options);
+      setSession(authResult);
+      await storeAuthResult(authResult);
+    }
+  };
+
+  const logout = async (): Promise<void> => {
+    if (authProvider && session) {
+      await AuthConnect.logout(authProvider, session);
+      setSession(undefined);
+      await clearAuthResult();
+    }
+  };
+
+  const canRefresh = async (): Promise<boolean> => {
+    if (session) {
+      return AuthConnect.isRefreshTokenAvailable(session);
+    }
+    return false;
+  };
+
+  const refresh = async (): Promise<void> => {
+    if (session && authProvider) {
+      const authResult = await AuthConnect.refreshSession(
+        authProvider,
+        session,
+      );
+      setSession(authResult);
+      if (authResult) {
+        storeAuthResult(authResult);
+      } else {
+        clearAuthResult();
+        throw new Error("The refresh failed, you are no longer logged in");
+      }
+    }
+  };
 
   return (
     <AuthContext.Provider
-      value={{ isSetup, flow, options, provider, session, updateAuthConfig }}
+      value={{
+        isSetup,
+        flow,
+        options,
+        provider,
+        session,
+        canRefresh,
+        login,
+        logout,
+        refresh,
+        updateAuthConfig,
+      }}
     >
       {isSetup ? children : <IonSpinner />}
     </AuthContext.Provider>
