@@ -49,6 +49,7 @@ type Context = {
     flow?: Flow,
   ) => Promise<void>;
   canRefresh: () => Promise<boolean>;
+  isExpired: () => Promise<boolean>;
   login: () => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
@@ -177,6 +178,13 @@ const AuthProvider = ({ children }: Props) => {
     return false;
   };
 
+  const isExpired = async (): Promise<boolean> => {
+    if (session) {
+      return AuthConnect.isAccessTokenExpired(session);
+    }
+    return false;
+  };
+
   const refresh = async (): Promise<void> => {
     if (session && authProvider) {
       const authResult = await AuthConnect.refreshSession(
@@ -202,6 +210,7 @@ const AuthProvider = ({ children }: Props) => {
         provider,
         session,
         canRefresh,
+        isExpired,
         login,
         logout,
         refresh,

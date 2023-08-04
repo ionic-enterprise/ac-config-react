@@ -6,6 +6,7 @@ export const useAuth = vi.fn(() => ({
   provider: null,
   options: null,
   canRefresh: vi.fn().mockResolvedValue(false),
+  isExpired: vi.fn().mockResolvedValue(false),
   login: vi.fn().mockResolvedValue(undefined),
   logout: vi.fn().mockResolvedValue(undefined),
   updateAuthConfig: vi.fn().mockResolvedValue(undefined),
