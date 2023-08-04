@@ -30,14 +30,26 @@ const TestConnectionPage: React.FC = () => {
 
   const handleAuth = async () => {
     setErrorMessage("");
+    if (session) {
+      await performLogout();
+    } else {
+      await performLogin();
+    }
+  };
+
+  const performLogin = async () => {
     try {
-      if (session) {
-        logout();
-      } else {
-        login();
-      }
+      await login();
     } catch (err: any) {
-      setErrorMessage(err.message);
+      setErrorMessage("Login failed");
+    }
+  };
+
+  const performLogout = async () => {
+    try {
+      await logout();
+    } catch (err: any) {
+      setErrorMessage("Logout failed");
     }
   };
 
