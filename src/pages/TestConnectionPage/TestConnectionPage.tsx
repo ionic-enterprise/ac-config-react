@@ -11,6 +11,7 @@ import {
   IonLabel,
   IonPage,
   IonTitle,
+  IonToast,
   IonToolbar,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
@@ -18,7 +19,8 @@ import { useAuth } from "../../providers/AuthProvider";
 import "./TestConnectionPage.css";
 
 const TestConnectionPage: React.FC = () => {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [refreshFailed, setRefreshFailed] = useState(false);
   const [disableRefresh, setDisableRefresh] = useState(false);
   const [displayRefreshAlert, setDisplayRefreshAlert] = useState(false);
 
@@ -29,7 +31,6 @@ const TestConnectionPage: React.FC = () => {
   }, [session]);
 
   const handleAuth = async () => {
-    setErrorMessage("");
     if (session) {
       await performLogout();
     } else {
@@ -41,16 +42,12 @@ const TestConnectionPage: React.FC = () => {
     try {
       await login();
     } catch (err: any) {
-      setErrorMessage("Login failed");
+      setLoginFailed(true);
     }
   };
 
   const performLogout = async () => {
-    try {
-      await logout();
-    } catch (err: any) {
-      setErrorMessage("Logout failed");
-    }
+    await logout();
   };
 
   const performRefresh = async () => {
@@ -58,11 +55,9 @@ const TestConnectionPage: React.FC = () => {
       await refresh();
       setDisplayRefreshAlert(true);
     } catch (err: any) {
-      setErrorMessage(err.message);
+      setRefreshFailed(true);
     }
   };
-
-  const hideRefreshAlert = () => {};
 
   return (
     <IonPage>
@@ -88,7 +83,6 @@ const TestConnectionPage: React.FC = () => {
                 {session ? "Logged In" : "Logged Out"}
               </span>
             </IonLabel>
-            <div className="error-message">{errorMessage}</div>
             <div className="actions">
               <IonButton
                 fill="outline"
@@ -115,6 +109,24 @@ const TestConnectionPage: React.FC = () => {
           buttons={["OK"]}
           onDidDismiss={() => setDisplayRefreshAlert(false)}
         ></IonAlert>
+
+        <IonToast
+          isOpen={loginFailed}
+          message="Login failed!"
+          color="danger"
+          duration={3000}
+          position="middle"
+          onDidDismiss={() => setLoginFailed(false)}
+        ></IonToast>
+
+        <IonToast
+          isOpen={refreshFailed}
+          message="Refresh failed!"
+          color="danger"
+          duration={3000}
+          position="middle"
+          onDidDismiss={() => setRefreshFailed(false)}
+        ></IonToast>
       </IonContent>
     </IonPage>
   );
