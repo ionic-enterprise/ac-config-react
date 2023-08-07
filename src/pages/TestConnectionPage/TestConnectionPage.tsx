@@ -110,8 +110,7 @@ const TestConnectionPage: React.FC = () => {
 
         <IonAlert
           isOpen={displayRefreshAlert}
-          header="Alert"
-          subHeader="Refresh"
+          header="Refresh"
           message="The refresh was a success!!"
           buttons={["OK"]}
           onDidDismiss={() => setDisplayRefreshAlert(false)}
