@@ -22,7 +22,7 @@ const TestConnectionPage: React.FC = () => {
   const [loginFailed, setLoginFailed] = useState(false);
   const [refreshFailed, setRefreshFailed] = useState(false);
   const [disableRefresh, setDisableRefresh] = useState(false);
-  const [displayRefreshAlert, setDisplayRefreshAlert] = useState(false);
+  const [displayRefreshSuccess, setDisplayRefreshSuccess] = useState(false);
 
   const { canRefresh, login, logout, refresh, session } = useAuth();
 
@@ -53,7 +53,7 @@ const TestConnectionPage: React.FC = () => {
   const performRefresh = async () => {
     try {
       await refresh();
-      setDisplayRefreshAlert(true);
+      setDisplayRefreshSuccess(true);
     } catch (err: any) {
       setRefreshFailed(true);
     }
@@ -102,13 +102,14 @@ const TestConnectionPage: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonAlert
-          isOpen={displayRefreshAlert}
-          header="Refresh"
+        <IonToast
+          isOpen={displayRefreshSuccess}
           message="The refresh was a success!!"
-          buttons={["OK"]}
-          onDidDismiss={() => setDisplayRefreshAlert(false)}
-        ></IonAlert>
+          color="success"
+          duration={3000}
+          position="middle"
+          onDidDismiss={() => setDisplayRefreshSuccess(false)}
+        ></IonToast>
 
         <IonToast
           isOpen={loginFailed}
