@@ -19,11 +19,11 @@
     "trapeze": "(export $(cat .env | xargs) && trapeze run -y config.yaml)"
   },
   "dependencies": {
-    "@capacitor/android": "5.2.2",
+    "@capacitor/android": "~5.2.3",
     "@capacitor/app": "5.0.6",
-    "@capacitor/core": "5.2.2",
+    "@capacitor/core": "~5.2.3",
     "@capacitor/haptics": "5.0.6",
-    "@capacitor/ios": "5.2.2",
+    "@capacitor/ios": "~5.2.3",
     "@capacitor/keyboard": "5.0.6",
     "@capacitor/preferences": "~5.0.6",
     "@capacitor/status-bar": "5.0.6",
@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@capacitor/assets": "~2.0.4",
-    "@capacitor/cli": "5.2.2",
+    "@capacitor/cli": "~5.2.3",
     "@ionic/prettier-config": "~4.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
@@ -56,7 +56,7 @@
     "eslint-plugin-react": "^7.32.2",
     "husky": "~8.0.3",
     "jsdom": "^22.1.0",
-    "lint-staged": "~13.2.3",
+    "lint-staged": "~14.0.0",
     "prettier": "~3.0.0",
     "typescript": "^5.1.6",
     "vite": "^4.3.9",
