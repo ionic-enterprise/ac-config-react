@@ -19,8 +19,8 @@ import { useAuth } from "../../providers/AuthProvider";
 import "./TestConnectionPage.css";
 
 const TestConnectionPage: React.FC = () => {
-  const [loginFailed, setLoginFailed] = useState(false);
-  const [refreshFailed, setRefreshFailed] = useState(false);
+  const [displayAuthFailed, setDisplayAuthFailed] = useState(false);
+  const [displayRefreshFailed, setDisplayRefreshFailed] = useState(false);
   const [disableRefresh, setDisableRefresh] = useState(false);
   const [displayRefreshSuccess, setDisplayRefreshSuccess] = useState(false);
 
@@ -31,31 +31,27 @@ const TestConnectionPage: React.FC = () => {
   }, [session]);
 
   const handleAuth = async () => {
-    if (session) {
-      await performLogout();
-    } else {
-      await performLogin();
-    }
-  };
-
-  const performLogin = async () => {
     try {
-      await login();
+      await performAuth();
     } catch (err: any) {
-      setLoginFailed(true);
+      setDisplayAuthFailed(true);
     }
   };
 
-  const performLogout = async () => {
-    await logout();
+  const performAuth = async () => {
+    if (session) {
+      await logout();
+    } else {
+      await login();
+    }
   };
 
-  const performRefresh = async () => {
+  const handleRefresh = async () => {
     try {
       await refresh();
       setDisplayRefreshSuccess(true);
     } catch (err: any) {
-      setRefreshFailed(true);
+      setDisplayRefreshFailed(true);
     }
   };
 
@@ -94,7 +90,7 @@ const TestConnectionPage: React.FC = () => {
               <IonButton
                 disabled={disableRefresh}
                 data-testid="refresh-button"
-                onClick={() => performRefresh()}
+                onClick={() => handleRefresh()}
               >
                 Refresh
               </IonButton>
@@ -104,7 +100,7 @@ const TestConnectionPage: React.FC = () => {
 
         <IonToast
           isOpen={displayRefreshSuccess}
-          message="The refresh was a success!!"
+          message="The refresh was successful!!"
           color="success"
           duration={3000}
           position="middle"
@@ -112,21 +108,21 @@ const TestConnectionPage: React.FC = () => {
         ></IonToast>
 
         <IonToast
-          isOpen={loginFailed}
-          message="Login failed!"
+          isOpen={displayAuthFailed}
+          message="Authentication failed!"
           color="danger"
           duration={3000}
           position="middle"
-          onDidDismiss={() => setLoginFailed(false)}
+          onDidDismiss={() => setDisplayAuthFailed(false)}
         ></IonToast>
 
         <IonToast
-          isOpen={refreshFailed}
+          isOpen={displayRefreshFailed}
           message="Refresh failed!"
           color="danger"
           duration={3000}
           position="middle"
-          onDidDismiss={() => setRefreshFailed(false)}
+          onDidDismiss={() => setDisplayRefreshFailed(false)}
         ></IonToast>
       </IonContent>
     </IonPage>
