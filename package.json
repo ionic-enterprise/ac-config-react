@@ -39,7 +39,7 @@
     "react-router-dom": "^5.3.4"
   },
   "devDependencies": {
-    "@capacitor/assets": "~3.0.1",
+    "@capacitor/assets": "~3.0.5",
     "@capacitor/cli": "~5.5.1",
     "@ionic/prettier-config": "~4.0.0",
     "@testing-library/jest-dom": "~6.1.4",
