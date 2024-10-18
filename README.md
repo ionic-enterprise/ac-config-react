@@ -20,33 +20,18 @@ Once the access is set up, the build processes is the same as for most Ionic app
 
 ## Development Notes
 
-### The `android/app/build.gradle` File
+## Native Configuration Files
 
-When doing a build, the following files may be modified:
+The `npm run build` command potentially modifies the following files:
 
-```
-android/app/build.gradle
+```shell
+android/variables.gradle
 android/app/src/main/AndroidManifest.xml
 ios/App/App/Info.plist
+src/config.ts
 ```
 
-You can clean these up with a `npm run clean`. If you accidentally commit the changes, the _only_ issue will be with
-the `android/app/build.gradle` file. The build adds a `manifestPlaceholders` variable:
-
-```diff
---- a/android/app/build.gradle
-+++ b/android/app/build.gradle
-@@ -15,6 +15,7 @@ android {
-              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
-             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
-         }
-+        manifestPlaceholders = ['AUTH_URL_SCHEME': 'msauth']
-     }
-     buildTypes {
-         release {
-```
-
-Do not commit any changes that include the `manifestPlaceholders` value.
+Changes to the native files can be reverted to the committed content via `npm run clean`.
 
 ## Pages
 
