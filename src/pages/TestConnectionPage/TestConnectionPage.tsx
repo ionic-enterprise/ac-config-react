@@ -1,5 +1,4 @@
 import {
-  IonAlert,
   IonButton,
   IonCard,
   IonCardContent,
@@ -33,7 +32,7 @@ const TestConnectionPage: React.FC = () => {
   const handleAuth = async () => {
     try {
       await performAuth();
-    } catch (err: any) {
+    } catch {
       setDisplayAuthFailed(true);
     }
   };
@@ -50,7 +49,7 @@ const TestConnectionPage: React.FC = () => {
     try {
       await refresh();
       setDisplayRefreshSuccess(true);
-    } catch (err: any) {
+    } catch {
       setDisplayRefreshFailed(true);
     }
   };

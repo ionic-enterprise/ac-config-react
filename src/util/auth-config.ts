@@ -5,7 +5,7 @@ export interface Flow {
   value: string;
 }
 
-export const flows: Array<Flow> = [
+export const flows: Flow[] = [
   { key: "implicit", value: "Implicit" },
   { key: "PKCE", value: "PKCE" },
 ];
@@ -15,7 +15,7 @@ export interface Provider {
   value: string;
 }
 
-export const providers: Array<Provider> = [
+export const providers: Provider[] = [
   { key: "auth0", value: "Auth0" },
   { key: "azure", value: "Azure B2C" },
   { key: "cognito", value: "Cognito (AWS)" },

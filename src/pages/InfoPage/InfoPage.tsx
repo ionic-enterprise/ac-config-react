@@ -93,7 +93,7 @@ const InfoPage: React.FC = () => {
         <dl>
           <dt>Discovery URL</dt>
           <dd>
-            <a target="_blank" href={config?.discoveryUrl}>
+            <a target="_blank" href={config?.discoveryUrl} rel="noreferrer">
               {config?.discoveryUrl}
             </a>
           </dd>
@@ -118,8 +118,9 @@ const InfoPage: React.FC = () => {
         <h1>Updating the Configuration</h1>
         <h2>General Configuration</h2>
         <p>
-          The following configuration items can be customized via the "Settings"
-          page to accomodate the needs of your OIDC provider.
+          The following configuration items can be customized via the
+          &quot;Settings&quot; page to accomodate the needs of your OIDC
+          provider.
         </p>
         <ul>
           <li>authConfig (Provider)</li>

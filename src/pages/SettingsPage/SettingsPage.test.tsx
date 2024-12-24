@@ -16,7 +16,7 @@ import SettingsPage from "./SettingsPage";
 vi.mock("../../providers/AuthProvider");
 vi.mock("../../util/auth");
 vi.mock("@ionic/react", async () => {
-  const actual = (await vi.importActual("@ionic/react")) as any;
+  const actual = (await vi.importActual("@ionic/react")) as object;
   return { ...actual, isPlatform: vi.fn().mockReturnValue(true) };
 });
 

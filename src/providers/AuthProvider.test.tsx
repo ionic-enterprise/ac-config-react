@@ -1,12 +1,10 @@
-import { CognitoProvider, ProviderOptions } from "@ionic-enterprise/auth";
-import { isPlatform } from "@ionic/react";
 import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+  AuthConnect,
+  CognitoProvider,
+  ProviderOptions,
+} from "@ionic-enterprise/auth";
+import { isPlatform } from "@ionic/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React, { useState } from "react";
 import { Mock, beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -29,12 +27,11 @@ import {
   storeConfig,
 } from "../util/auth-store";
 import AuthProvider, { useAuth } from "./AuthProvider";
-import { AuthConnect } from "@ionic-enterprise/auth";
 
 vi.mock("../util/auth-store");
 vi.mock("@ionic-enterprise/auth");
 vi.mock("@ionic/react", async () => {
-  const actual = (await vi.importActual("@ionic/react")) as any;
+  const actual = (await vi.importActual("@ionic/react")) as object;
   return { ...actual, isPlatform: vi.fn().mockReturnValue(true) };
 });
 
@@ -133,12 +130,6 @@ describe("<AuthProvider />", () => {
     accessToken: "test-access-token",
     refreshToken: "test-refresh-token",
     idToken: "test-id-token",
-  };
-
-  const refreshedSession = {
-    accessToken: "ref-test-access-token",
-    refreshToken: "ref-test-refresh-token",
-    idToken: "ref-test-id-token",
   };
 
   beforeEach(() => {

@@ -36,8 +36,10 @@ import {
   storeConfig,
 } from "../util/auth-store";
 
-type Props = { children?: ReactNode };
-type Context = {
+interface Props {
+  children?: ReactNode;
+}
+interface Context {
   isSetup: boolean;
   flow?: Flow;
   options?: ProviderOptions;
@@ -53,7 +55,7 @@ type Context = {
   login: () => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
-};
+}
 
 const AuthContext = createContext<Context | undefined>(undefined);
 

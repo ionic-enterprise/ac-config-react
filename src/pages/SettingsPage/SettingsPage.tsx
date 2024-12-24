@@ -65,8 +65,8 @@ const SettingsPage: React.FC = () => {
   }, [authFlow, authProvider, options, session]);
 
   const compareKVPair = (
-    x: { key: string; value: any },
-    y: { key: string; value: any },
+    x: { key: string; value: unknown },
+    y: { key: string; value: unknown },
   ) => {
     return x && y && x.key === y.key;
   };
@@ -131,7 +131,7 @@ const SettingsPage: React.FC = () => {
           </div>
         )}
         <IonList>
-          <IonListHeader> Ionic's OIDC Server Options</IonListHeader>
+          <IonListHeader> Ionic&apos;s OIDC Server Options</IonListHeader>
           <IonItem>
             <IonLabel>
               <IonButton
