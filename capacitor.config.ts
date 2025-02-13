@@ -4,12 +4,12 @@ const config: CapacitorConfig = {
   appId: "io.ionic.acconfigreact",
   appName: "AC Config Tool",
   webDir: "dist",
-  server: {
-    androidScheme: "https",
-  },
   plugins: {
     SplashScreen: {
       launchAutoHide: false,
+    },
+    StatusBar: {
+      overlaysWebView: false,
     },
   },
 };
