@@ -1,9 +1,9 @@
+import { Capacitor } from "@capacitor/core";
 import {
   AuthConnect,
   CognitoProvider,
   ProviderOptions,
 } from "@ionic-enterprise/auth";
-import { isPlatform } from "@ionic/react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React, { useState } from "react";
 import { Mock, beforeEach, describe, expect, it, vi } from "vitest";
@@ -28,12 +28,11 @@ import {
 } from "../util/auth-store";
 import AuthProvider, { useAuth } from "./AuthProvider";
 
+vi.mock("@capacitor/core");
 vi.mock("../util/auth-store");
 vi.mock("@ionic-enterprise/auth");
-vi.mock("@ionic/react", async () => {
-  const actual = (await vi.importActual("@ionic/react")) as object;
-  return { ...actual, isPlatform: vi.fn().mockReturnValue(true) };
-});
+
+(Capacitor.isNativePlatform as Mock).mockReturnValue(true);
 
 const expectOptions = async (expected: ProviderOptions): Promise<void> => {
   const audience = await screen.findByTestId("audience");
@@ -340,7 +339,7 @@ describe("<AuthProvider />", () => {
 
       describe("on mobile", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
         });
 
         it("defaults to AWS", async () => {
@@ -351,7 +350,7 @@ describe("<AuthProvider />", () => {
 
       describe("on web", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
         });
 
         it("defaults to AWS with the web config", async () => {
@@ -404,7 +403,7 @@ describe("<AuthProvider />", () => {
     describe("auth connect setup", () => {
       describe("on mobile", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
         });
 
         it("uses the AWS defaults on mobile if nothing is saved", async () => {
@@ -450,7 +449,7 @@ describe("<AuthProvider />", () => {
 
       describe("on web", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
         });
 
         it("uses the AWS defaults on mobile if nothing is saved", async () => {

@@ -1,4 +1,4 @@
-import { isPlatform } from "@ionic/react";
+import { Capacitor } from "@capacitor/core";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { Mock, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAuth } from "../../providers/AuthProvider";
@@ -13,12 +13,11 @@ import {
 } from "../../util/auth-config";
 import SettingsPage from "./SettingsPage";
 
+vi.mock("@capacitor/core");
 vi.mock("../../providers/AuthProvider");
 vi.mock("../../util/auth");
-vi.mock("@ionic/react", async () => {
-  const actual = (await vi.importActual("@ionic/react")) as object;
-  return { ...actual, isPlatform: vi.fn().mockReturnValue(true) };
-});
+
+(Capacitor.isNativePlatform as Mock).mockReturnValue(true);
 
 describe("Settings Page", () => {
   beforeEach(() => {
@@ -164,7 +163,7 @@ describe("Settings Page", () => {
 
       describe("on mobile", () => {
         beforeEach(async () => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
           const { queryByTestId } = render(<SettingsPage />);
           input = queryByTestId("flow-input");
         });
@@ -176,7 +175,7 @@ describe("Settings Page", () => {
 
       describe("on web", () => {
         beforeEach(async () => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
           render(<SettingsPage />);
           input = await screen.findByTestId("flow-input");
         });
@@ -318,7 +317,7 @@ describe("Settings Page", () => {
 
       describe("on mobile", () => {
         beforeEach(async () => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
           const { queryByTestId } = render(<SettingsPage />);
           input = queryByTestId("flow-input");
         });
@@ -330,7 +329,7 @@ describe("Settings Page", () => {
 
       describe("on web", () => {
         beforeEach(async () => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
           render(<SettingsPage />);
           input = await screen.findByTestId("flow-input");
         });
@@ -378,7 +377,7 @@ describe("Settings Page", () => {
     describe("azure button", () => {
       describe("on the web", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
         });
 
         it("saves the config", async () => {
@@ -397,7 +396,7 @@ describe("Settings Page", () => {
 
       describe("on mobile", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
         });
 
         it("saves the config", async () => {
@@ -418,7 +417,7 @@ describe("Settings Page", () => {
     describe("AWS button", () => {
       describe("on the web", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
         });
 
         it("saves the config", async () => {
@@ -437,7 +436,7 @@ describe("Settings Page", () => {
 
       describe("on mobile", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
         });
 
         it("saves the config", async () => {
@@ -458,7 +457,7 @@ describe("Settings Page", () => {
     describe("Auth0 button", () => {
       describe("on the web", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
         });
 
         it("saves the config", async () => {
@@ -477,7 +476,7 @@ describe("Settings Page", () => {
 
       describe("on mobile", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
         });
 
         it("saves the config", async () => {
@@ -498,7 +497,7 @@ describe("Settings Page", () => {
     describe("Okta button", () => {
       describe("on the web", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
         });
 
         it("saves the config", async () => {
@@ -517,7 +516,7 @@ describe("Settings Page", () => {
 
       describe("on mobile", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
         });
 
         it("saves the config", async () => {
@@ -538,7 +537,7 @@ describe("Settings Page", () => {
     describe("customize button", () => {
       describe("on web", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(false);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(false);
         });
 
         it("saves the config", async () => {
@@ -604,7 +603,7 @@ describe("Settings Page", () => {
 
       describe("on mobile", () => {
         beforeEach(() => {
-          (isPlatform as Mock).mockReturnValue(true);
+          (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
         });
 
         it("saves the config", async () => {

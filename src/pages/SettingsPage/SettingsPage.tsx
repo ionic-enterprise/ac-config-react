@@ -1,3 +1,5 @@
+import { Capacitor } from "@capacitor/core";
+import { ProviderOptions } from "@ionic-enterprise/auth";
 import {
   IonButton,
   IonContent,
@@ -12,7 +14,6 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
-  isPlatform,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../providers/AuthProvider";
@@ -29,7 +30,6 @@ import {
   webConfig,
 } from "../../util/auth-config";
 import "./SettingsPage.css";
-import { ProviderOptions } from "@ionic-enterprise/auth";
 
 const SettingsPage: React.FC = () => {
   const {
@@ -49,7 +49,7 @@ const SettingsPage: React.FC = () => {
   const [disableEdits, setDisableEdits] = useState(false);
   const [disableTemplates, setDisableTemplates] = useState(false);
 
-  const showFlow = !isPlatform("mobile");
+  const showFlow = !Capacitor.isNativePlatform();
 
   useEffect(() => {
     setDisableEdits(!!session);
@@ -90,7 +90,7 @@ const SettingsPage: React.FC = () => {
   const configureCustom = async () => {
     await setIonicProvider(
       {
-        ...(isPlatform("mobile") ? mobileConfig : webConfig),
+        ...(Capacitor.isNativePlatform() ? mobileConfig : webConfig),
         clientId,
         discoveryUrl,
         audience,
@@ -109,10 +109,12 @@ const SettingsPage: React.FC = () => {
     await updateAuthConfig(
       {
         ...opt,
-        ...(isPlatform("hybrid") ? {} : webConfig),
+        ...(Capacitor.isNativePlatform() ? {} : webConfig),
       },
       providers.find((p) => p.key === providerKey) as Provider,
-      isPlatform("hybrid") ? undefined : flows.find((f) => f.key === flowKey),
+      Capacitor.isNativePlatform()
+        ? undefined
+        : flows.find((f) => f.key === flowKey),
     );
   };
 

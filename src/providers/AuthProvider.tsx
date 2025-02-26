@@ -1,16 +1,9 @@
+import { Capacitor } from "@capacitor/core";
 import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { IonSpinner, isPlatform } from "@ionic/react";
-import {
+  AuthProvider as ACAuthProvider,
   Auth0Provider,
   AuthConnect,
   AuthConnectConfig,
-  AuthProvider as ACAuthProvider,
   AuthResult,
   AzureProvider,
   CognitoProvider,
@@ -18,6 +11,14 @@ import {
   OneLoginProvider,
   ProviderOptions,
 } from "@ionic-enterprise/auth";
+import { IonSpinner } from "@ionic/react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   Flow,
   Provider,
@@ -92,7 +93,7 @@ const AuthProvider = ({ children }: Props) => {
       setOptions(
         (await getProviderOptions()) || {
           ...awsConfig,
-          ...(isPlatform("mobile") ? {} : webConfig),
+          ...(Capacitor.isNativePlatform() ? {} : webConfig),
         },
       );
     };
@@ -101,7 +102,7 @@ const AuthProvider = ({ children }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (provider && options && (isPlatform("mobile") || flow)) {
+    if (provider && options && (Capacitor.isNativePlatform() || flow)) {
       createAuthProvider();
     }
   }, [flow, provider, options]);
@@ -144,7 +145,7 @@ const AuthProvider = ({ children }: Props) => {
   const setupAuthConnect = async (): Promise<void> => {
     const cfg: AuthConnectConfig = {
       logLevel: "DEBUG",
-      platform: isPlatform("hybrid") ? "capacitor" : "web",
+      platform: Capacitor.isNativePlatform() ? "capacitor" : "web",
       ios: {
         webView: "private",
       },

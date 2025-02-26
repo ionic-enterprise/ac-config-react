@@ -1,22 +1,22 @@
+import { Capacitor } from "@capacitor/core";
+import { ProviderOptions } from "@ionic-enterprise/auth";
 import {
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
-  isPlatform,
   useIonViewDidEnter,
 } from "@ionic/react";
-import "./InfoPage.css";
 import { useEffect, useState } from "react";
-import { Flow, Provider } from "../../util/auth-config";
-import { ProviderOptions } from "@ionic-enterprise/auth";
 import { useAuth } from "../../providers/AuthProvider";
+import { Flow, Provider } from "../../util/auth-config";
 import {
   getFlow,
   getProvider,
   getProviderOptions,
 } from "../../util/auth-store";
+import "./InfoPage.css";
 
 const InfoPage: React.FC = () => {
   const [showFlow, setShowFlow] = useState(false);
@@ -39,7 +39,7 @@ const InfoPage: React.FC = () => {
   }, [session]);
 
   useIonViewDidEnter(() => {
-    const isWeb = !isPlatform("mobile");
+    const isWeb = !Capacitor.isNativePlatform();
     setShowFlow(isWeb);
     const updateData = async () => {
       const config = await getProviderOptions();
