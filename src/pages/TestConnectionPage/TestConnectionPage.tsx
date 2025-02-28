@@ -27,7 +27,7 @@ const TestConnectionPage: React.FC = () => {
 
   useEffect(() => {
     canRefresh().then((x) => setDisableRefresh(!x));
-  }, [session]);
+  }, [session, canRefresh]);
 
   const handleAuth = async () => {
     try {

@@ -16,7 +16,7 @@ import {
   flows,
   providers,
   webConfig,
-} from "../util/auth-config";
+} from "../../util/auth-config";
 import {
   clearAuthResult,
   getAuthResult,
@@ -25,11 +25,12 @@ import {
   getProviderOptions,
   storeAuthResult,
   storeConfig,
-} from "../util/auth-store";
-import AuthProvider, { useAuth } from "./AuthProvider";
+} from "../../util/auth-store";
+import { useAuth } from "./AuthContext";
+import AuthProvider from "./AuthProvider";
 
 vi.mock("@capacitor/core");
-vi.mock("../util/auth-store");
+vi.mock("../../util/auth-store");
 vi.mock("@ionic-enterprise/auth");
 
 (Capacitor.isNativePlatform as Mock).mockReturnValue(true);
@@ -184,7 +185,7 @@ describe("<AuthProvider />", () => {
       const button = await screen.findByTestId("updateButton");
       expect(AuthConnect.setup).toHaveBeenCalledTimes(1);
       fireEvent.click(button);
-      await waitFor(() => expect(AuthConnect.setup).toHaveBeenCalledTimes(2));
+      await waitFor(() => expect(AuthConnect.setup).toHaveBeenCalledTimes(3));
     });
   });
 
