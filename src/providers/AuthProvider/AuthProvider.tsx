@@ -12,13 +12,7 @@ import {
   ProviderOptions,
 } from "@ionic-enterprise/auth";
 import { IonSpinner } from "@ionic/react";
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Flow,
   Provider,
@@ -26,7 +20,7 @@ import {
   flows,
   providers,
   webConfig,
-} from "../util/auth-config";
+} from "../../util/auth-config";
 import {
   clearAuthResult,
   getAuthResult,
@@ -35,30 +29,12 @@ import {
   getProviderOptions,
   storeAuthResult,
   storeConfig,
-} from "../util/auth-store";
+} from "../../util/auth-store";
+import { AuthContext } from "./AuthContext";
 
 interface Props {
   children?: ReactNode;
 }
-interface Context {
-  isSetup: boolean;
-  flow?: Flow;
-  options?: ProviderOptions;
-  provider?: Provider;
-  session?: AuthResult;
-  updateAuthConfig: (
-    options: ProviderOptions,
-    provider: Provider,
-    flow?: Flow,
-  ) => Promise<void>;
-  canRefresh: () => Promise<boolean>;
-  isExpired: () => Promise<boolean>;
-  login: () => Promise<void>;
-  logout: () => Promise<void>;
-  refresh: () => Promise<void>;
-}
-
-const AuthContext = createContext<Context | undefined>(undefined);
 
 const AuthProvider = ({ children }: Props) => {
   const [authProvider, setAuthProvider] = useState<
@@ -102,61 +78,61 @@ const AuthProvider = ({ children }: Props) => {
   }, []);
 
   useEffect(() => {
+    const createAuthProvider = (): void => {
+      switch (provider?.key) {
+        case "auth0":
+          setAuthProvider(new Auth0Provider());
+          break;
+
+        case "azure":
+          setAuthProvider(new AzureProvider());
+          break;
+
+        case "cognito":
+          setAuthProvider(new CognitoProvider());
+          break;
+
+        case "okta":
+          setAuthProvider(new OktaProvider());
+          break;
+
+        case "onelogin":
+          setAuthProvider(new OneLoginProvider());
+          break;
+
+        default:
+          console.error("a provider was not set, defaulting to AWS");
+          setAuthProvider(new CognitoProvider());
+          break;
+      }
+    };
+
     if (provider && options && (Capacitor.isNativePlatform() || flow)) {
       createAuthProvider();
     }
   }, [flow, provider, options]);
 
   useEffect(() => {
+    const setupAuthConnect = async (): Promise<void> => {
+      const cfg: AuthConnectConfig = {
+        logLevel: "DEBUG",
+        platform: Capacitor.isNativePlatform() ? "capacitor" : "web",
+        ios: {
+          webView: "private",
+        },
+        web: {
+          uiMode: "popup",
+          authFlow: flow ? flow.key : "implicit",
+        },
+      };
+
+      await AuthConnect.setup(cfg);
+    };
+
     if (authProvider) {
       setupAuthConnect().then(() => setIsSetup(true));
     }
-  }, [authProvider]);
-
-  const createAuthProvider = (): void => {
-    switch (provider?.key) {
-      case "auth0":
-        setAuthProvider(new Auth0Provider());
-        break;
-
-      case "azure":
-        setAuthProvider(new AzureProvider());
-        break;
-
-      case "cognito":
-        setAuthProvider(new CognitoProvider());
-        break;
-
-      case "okta":
-        setAuthProvider(new OktaProvider());
-        break;
-
-      case "onelogin":
-        setAuthProvider(new OneLoginProvider());
-        break;
-
-      default:
-        console.error("a provider was not set, defaulting to AWS");
-        setAuthProvider(new CognitoProvider());
-        break;
-    }
-  };
-
-  const setupAuthConnect = async (): Promise<void> => {
-    const cfg: AuthConnectConfig = {
-      logLevel: "DEBUG",
-      platform: Capacitor.isNativePlatform() ? "capacitor" : "web",
-      ios: {
-        webView: "private",
-      },
-      web: {
-        uiMode: "popup",
-        authFlow: flow ? flow.key : "implicit",
-      },
-    };
-
-    await AuthConnect.setup(cfg);
-  };
+  }, [authProvider, flow]);
 
   const login = async (): Promise<void> => {
     if (authProvider && options) {
@@ -223,13 +199,6 @@ const AuthProvider = ({ children }: Props) => {
       {isSetup ? children : <IonSpinner />}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined)
-    throw new Error("useAuth must be used within AuthProvider");
-  return context;
 };
 
 export default AuthProvider;

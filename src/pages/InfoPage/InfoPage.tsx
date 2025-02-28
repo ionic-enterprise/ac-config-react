@@ -36,7 +36,7 @@ const InfoPage: React.FC = () => {
     setLoggedIn(!!session);
     canRefresh().then((x) => setRefreshAvailable(x));
     isExpired().then((x) => setAccessTokenExpired(x));
-  }, [session]);
+  }, [session, canRefresh, isExpired]);
 
   useIonViewDidEnter(() => {
     const isWeb = !Capacitor.isNativePlatform();
