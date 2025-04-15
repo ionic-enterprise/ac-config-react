@@ -1,5 +1,7 @@
 import eslint from "@eslint/js";
 import reactESLint from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 import typescriptESLint from "typescript-eslint";
 import globals from "globals";
 
@@ -7,6 +9,8 @@ export default [
   eslint.configs.recommended,
   reactESLint.configs.flat.recommended,
   reactESLint.configs.flat["jsx-runtime"],
+  reactHooks.configs["recommended-latest"],
+  reactRefresh.configs.vite,
   ...typescriptESLint.configs.recommended,
   ...typescriptESLint.configs.stylistic,
   {
