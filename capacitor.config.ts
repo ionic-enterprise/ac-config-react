@@ -4,6 +4,9 @@ const config: CapacitorConfig = {
   appId: "io.ionic.acconfigreact",
   appName: "AC Config Tool",
   webDir: "dist",
+  android: {
+    adjustMarginsForEdgeToEdge: "auto",
+  },
   plugins: {
     SplashScreen: {
       launchAutoHide: false,
